@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:14.2
+    command: "postgres -c 'max_connections=500'"
+    environment:
+      POSTGRES_DB: myappdb
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test_db_password
+    ports: 
+      - '5432:5432'
+    volumes:
+      - app-postgres:/var/lib/postgresql/data
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "rm -f tmp/pids/server.pid && rails db:create && rails db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    environment:
+      DB_HOST: postgres
+      DB_NAME: myappdb
+      DB_USERNAME: test
+      DB_PASSWORD: test_db_password
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app:cached
+    links:
+      - postgres
+    ports:
+      - '3000:3000'
+
+
+volumes:
+  app-postgres:
