@@ -1,4 +1,4 @@
-FROM ruby:3.2.2 AS rails-toolbox
+FROM ruby:3.0.0 AS rails-toolbox
 
 # Default directory
 # Install rails
