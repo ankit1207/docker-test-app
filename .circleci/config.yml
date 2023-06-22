@@ -43,6 +43,12 @@ jobs:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
+      - run:
+          name: Install dependencies
+          command: |
+            gem install bundler -v 2.1.4
+            bundle install --path=vendor/bundle --jobs 4 --retry 3
+
       # Database setup
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run: RAILS_ENV=test bundle exec rake db:create
