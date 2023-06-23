@@ -21,9 +21,9 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       - image: cimg/postgres:14.2
         environment:
-          - POSTGRES_USER: myuser
-          - POSTGRES_PASSWORD: mypassword
-          - POSTGRES_DB: mydatabase
+          - POSTGRES_USER: <%= ENV['DB_USERNAME'] %>
+          - POSTGRES_PASSWORD: <%= ENV['DB_PASSWORD'] %>
+          - POSTGRES_DB: <%= ENV['DB_NAME'] %>
           - POSTGRES_HOST_AUTH_METHOD: trust
 
 
