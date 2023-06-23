@@ -45,13 +45,6 @@ jobs:
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
       - run:
-          name: Set up PostgreSQL
-          command: |
-            sudo service postgresql start
-            sudo -u postgres psql -c "CREATE USER circleci WITH SUPERUSER LOGIN CREATEDB PASSWORD 'circleci';"
-            bundle exec rake db:setup
-
-      - run:
           name: Install dependencies
           command: |
             gem install bundler -v 2.1.4
