@@ -21,7 +21,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       - image: cimg/postgres:14.2
         environment:
-          - POSTGRES_USER: test
+          - POSTGRES_USER: postgres
           - POSTGRES_PASSWORD: test_db_password
           - POSTGRES_DB: myappdb
           - POSTGRES_HOST_AUTH_METHOD: trust
