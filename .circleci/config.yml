@@ -3,19 +3,16 @@
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
 version: 2.1
-
 workflows:
   build:
     jobs:
       - build:
           context: Docker Test App
-
 jobs:
   build:
     docker:
       # specify the version you desire here
       - image: circleci/ruby:3.0.0
-
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -25,36 +22,36 @@ jobs:
           - POSTGRES_PASSWORD: test_db_password
           - POSTGRES_DB: myappdb
           - POSTGRES_HOST_AUTH_METHOD: trust
-
-
     working_directory: ~/repo
-
     steps:
       - checkout
-
       # Download and cache dependencies
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-
       - save_cache:
           paths:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-
+      - run:
+          name: Install PostgreSQL client
+          command: sudo apt-get install -y postgresql-client
+      - run:
+          name: Create role and database
+          command: |
+            psql -h localhost -U test -c "CREATE ROLE circleci LOGIN PASSWORD 'circleci';"
+            psql -h localhost -U test -c "CREATE DATABASE myappdb OWNER circleci;"
       - run:
           name: Install dependencies
           command: |
             gem install bundler -v 2.1.4
             bundle install --path=vendor/bundle --jobs 4 --retry 3
-
       # Database setup
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run: RAILS_ENV=test bundle exec rake db:create
       - run: RAILS_ENV=test bundle exec rake db:schema:load
-
       # Specs
       - run:
           name: Run tests
