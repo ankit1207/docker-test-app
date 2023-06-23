@@ -36,9 +36,6 @@ jobs:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
       - run:
-          name: Install PostgreSQL client
-          command: sudo apt-get install -y postgresql-client
-      - run:
           name: Create role and database
           command: |
             psql -h localhost -U test -c "CREATE ROLE circleci LOGIN PASSWORD 'circleci';"
