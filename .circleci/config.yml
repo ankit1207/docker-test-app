@@ -52,8 +52,8 @@ jobs:
 
       # Database setup
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run: RAILS_ENV=test bundle exec rake db:create
-      - run: RAILS_ENV=test bundle exec rake db:schema:load
+      - run: RAILS_ENV=test bundle exec rails db:create
+      - run: RAILS_ENV=test bundle exec rails db:schema:load
 
       # Specs
       - run:
